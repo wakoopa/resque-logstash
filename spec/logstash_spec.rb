@@ -57,5 +57,21 @@ describe Resque::Logstash do
 
       job.logstash_push_duration(0.3, [])
     end
+
+  describe '#configure' do
+    it 'yields' do
+      yielded = false
+      Resque::Logstash.configure { yielded = true }
+      expect(yielded).to be_true
+    end
+
+    it 'yield config object' do
+      Resque::Logstash.configure do |c|
+        %w{transport tags disabled}.each do |method|
+          expect(c).to respond_to("#{method}=")
+          expect(c).to respond_to("#{method}")
+        end
+      end
+    end
   end
 end
