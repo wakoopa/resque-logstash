@@ -7,11 +7,19 @@ describe Resque::Logstash do
 
   let(:job) { JobLike.new }
 
+  before do
+    Resque::Logstash.transport = double(:push => nil)
+  end
+
   describe '#around_perform_logstash_measure' do
     it 'calls logstash_push_time with the duration' do
       expect(job).to receive(:logstash_push_duration).with(be_within(0.01).of(0.3))
 
       job.around_perform_logstash_measure { sleep 0.3 }
+    end
+
+    it 'ignores arguments' do
+      expect { job.around_perform_logstash_measure(:test, "blah") {} }.not_to raise_error
     end
   end
 

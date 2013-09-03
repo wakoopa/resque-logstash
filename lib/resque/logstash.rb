@@ -10,7 +10,7 @@ module Resque
       attr_accessor :transport
     end
 
-    def around_perform_logstash_measure
+    def around_perform_logstash_measure(*)
       started_at = Time.now
       yield
     ensure
