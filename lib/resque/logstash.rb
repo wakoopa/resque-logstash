@@ -7,7 +7,7 @@ require 'resque/logstash/transport/redis'
 module Resque
   module Logstash
     class << self
-      attr_accessor :transport
+      attr_accessor :transport, :tags
     end
 
     def around_perform_logstash_measure(*)
@@ -26,7 +26,8 @@ module Resque
         "@fields" => {
           "job" => self.name,
           "duration" => duration
-        }
+        },
+        "@tags" => Resque::Logstash.tags
     end
   end
 end
