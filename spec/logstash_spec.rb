@@ -13,18 +13,19 @@ describe Resque::Logstash do
 
   describe '#around_perform_logstash_measure' do
     it 'calls logstash_push_time with the duration' do
-      expect(job).to receive(:logstash_push_duration).with(be_within(0.01).of(0.3))
+      expect(job).to receive(:logstash_push_duration).with(be_within(0.01).of(0.3), [])
 
       job.around_perform_logstash_measure { sleep 0.3 }
     end
 
-    it 'ignores arguments' do
+    it 'logs job arguments' do
+      expect(job).to receive(:logstash_push_duration).with(kind_of(Numeric), [:test, "blah"])
       expect { job.around_perform_logstash_measure(:test, "blah") {} }.not_to raise_error
     end
   end
 
   describe '#logstash_create_event' do
-    let(:event) { job.logstash_create_event 0.3 }
+    let(:event) { job.logstash_create_event 0.3, [:arg1, "arg2"] }
 
     it 'puts classname as the job field' do
       expect(event.fields['job']).to eq('JobLike')
@@ -43,6 +44,10 @@ describe Resque::Logstash do
 
       expect(event.tags).to include(*%w{tag1 tag2})
     end
+
+    it 'adds job arguments as Strings' do
+      expect(event.fields['job_arguments']).to eq(%w{arg1 arg2})
+    end
   end
 
   describe '#logstash_push_duration' do
@@ -50,7 +55,7 @@ describe Resque::Logstash do
       Resque::Logstash.transport = double
       expect(Resque::Logstash.transport).to receive(:push)
 
-      job.logstash_push_duration(0.3)
+      job.logstash_push_duration(0.3, [])
     end
   end
 end
