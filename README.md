@@ -1,6 +1,7 @@
 # Resque::Logstash
 
-TODO: Write a gem description
+Logs duration of a resque job in logstash. At the moment only redis
+transport is supported.
 
 ## Installation
 
@@ -18,7 +19,17 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+Resque::Logstash.transport = Resque::Logstash::Transport::Redis.new('localhost', 6379)
+
+class SomeJob
+  extend Resque::Logstash
+
+  def self.perform
+    # do the heavy lifting here
+  end
+end
+```
 
 ## Contributing
 
