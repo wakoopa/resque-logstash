@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe Resque::Logstash do
   class JobLike
-    include Resque::Logstash
+    extend Resque::Logstash
   end
 
-  let(:job) { JobLike.new }
+  let(:job) { JobLike }
 
   before do
     Resque::Logstash.transport = double(:push => nil)

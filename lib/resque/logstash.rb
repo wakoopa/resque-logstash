@@ -22,9 +22,9 @@ module Resque
     end
 
     def logstash_create_event(duration)
-      LogStash::Event.new "@message" => "Job #{self.class} finished in #{duration}s",
+      LogStash::Event.new "@message" => "Job #{self.name} finished in #{duration}s",
         "@fields" => {
-          "job" => self.class.to_s,
+          "job" => self.name,
           "duration" => duration
         }
     end
