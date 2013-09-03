@@ -32,6 +32,7 @@ module Resque
     end
 
     def logstash_push_duration(duration, args)
+      return if Resque::Logstash.config.disabled?
       Resque::Logstash.config.transport.push logstash_create_event(duration, args)
     end
 

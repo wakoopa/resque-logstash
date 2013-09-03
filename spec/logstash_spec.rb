@@ -58,6 +58,16 @@ describe Resque::Logstash do
       job.logstash_push_duration(0.3, [])
     end
 
+    it 'does not push if disabled' do
+      Resque::Logstash.configure { |c| c.disabled = true }
+
+      expect(Resque::Logstash.transport).not_to receive(:push)
+      job.logstash_push_duration(0.3, [])
+
+      Resque::Logstash.configure { |c| c.disabled = false }
+    end
+  end
+
   describe '#configure' do
     it 'yields' do
       yielded = false
