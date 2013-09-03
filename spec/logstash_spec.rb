@@ -30,4 +30,13 @@ describe Resque::Logstash do
       expect(event.message).to eq("Job JobLike finished in 0.3s")
     end
   end
+
+  describe '#logstash_push_duration' do
+    it 'calls push on @transport' do
+      Resque::Logstash.transport = double
+      expect(Resque::Logstash.transport).to receive(:push)
+
+      job.logstash_push_duration(0.3)
+    end
+  end
 end
