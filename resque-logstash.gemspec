@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Resque::Logstash::VERSION
   spec.authors       = ["Eugene Pimenov"]
   spec.email         = ["eugene@libc.st"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Measure duration of a resque job and log it in the logstash}
+  spec.summary       = %q{A really simple logstash logger for resque}
   spec.homepage      = ""
   spec.license       = "MIT"
 
