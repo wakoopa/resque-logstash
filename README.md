@@ -3,6 +3,8 @@
 Logs duration of a resque job in logstash. At the moment only redis
 transport is supported.
 
+Depends on Resque 1.24
+
 ## Installation
 
 Add this line to your application's Gemfile:
