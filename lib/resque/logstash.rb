@@ -37,13 +37,11 @@ module Resque
     end
 
     def logstash_create_event(duration, args)
-      LogStash::Event.new "@message" => "Job #{self.name} finished in #{duration}s",
-        "@fields" => {
-          "job" => self.name,
-          "duration" => duration,
-          "job_arguments" => args.map { |a| a.to_s }
-        },
-        "@tags" => Resque::Logstash.config.tags
+      LogStash::Event.new "message" => "Job #{self.name} finished in #{duration}s",
+        "job" => self.name,
+        "duration" => duration,
+        "job_arguments" => args.map { |a| a.to_s },
+        "tags" => Resque::Logstash.config.tags
     end
   end
 end

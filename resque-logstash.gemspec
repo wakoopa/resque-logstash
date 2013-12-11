@@ -22,5 +22,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
   spec.add_dependency 'resque', '~> 1.24'
-  spec.add_dependency 'logstash-event'
+  spec.add_dependency 'logstash-event', '~> 1.2'
 end

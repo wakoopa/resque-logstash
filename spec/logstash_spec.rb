@@ -40,7 +40,7 @@ describe Resque::Logstash do
     end
 
     it 'provides a nice message' do
-      expect(event.message).to eq("Job JobLike finished in 0.3s")
+      expect(event['message']).to eq("Job JobLike finished in 0.3s")
     end
 
     it 'adds tags' do
