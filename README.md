@@ -22,10 +22,10 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
-Resque::Logstash.transport = Resque::Logstash::Transport::Redis.new('localhost', 6379)
+Resque::Plugins::Logstash.transport = Resque::Plugins::Logstash::Transport::Redis.new('localhost', 6379)
 
 class SomeJob
-  extend Resque::Logstash
+  extend Resque::Plugins::Logstash
 
   def self.perform
     # do the heavy lifting here
