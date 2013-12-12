@@ -7,7 +7,7 @@ require 'resque/logstash/transport/redis'
 require 'resque/logstash/config'
 
 
-module Resque
+module Resque::Plugin
   module Logstash
     class << self
       extend Forwardable
@@ -32,8 +32,8 @@ module Resque
     end
 
     def logstash_push_duration(duration, args)
-      return if Resque::Logstash.config.disabled?
-      Resque::Logstash.config.transport.push logstash_create_event(duration, args)
+      return if Logstash.config.disabled?
+      Logstash.config.transport.push logstash_create_event(duration, args)
     end
 
     def logstash_create_event(duration, args)
@@ -41,7 +41,7 @@ module Resque
         "job" => self.name,
         "duration" => duration,
         "job_arguments" => args.map { |a| a.to_s },
-        "tags" => Resque::Logstash.config.tags
+        "tags" => Logstash.config.tags
     end
   end
 end

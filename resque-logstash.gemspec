@@ -5,7 +5,7 @@ require 'resque/logstash/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "resque-logstash"
-  spec.version       = Resque::Logstash::VERSION
+  spec.version       = Resque::Plugin::Logstash::VERSION
   spec.authors       = ["Eugene Pimenov"]
   spec.email         = ["eugene@libc.st"]
   spec.description   = %q{Measure duration of a resque job and log it in the logstash}
