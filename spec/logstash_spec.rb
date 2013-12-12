@@ -1,18 +1,18 @@
 require 'spec_helper'
 
-describe Resque::Plugin::Logstash do
+describe Resque::Plugins::Logstash do
   class JobLike
-    extend Resque::Plugin::Logstash
+    extend Resque::Plugins::Logstash
   end
 
   let(:job) { JobLike }
 
   before do
-    Resque::Plugin::Logstash.transport = double(:push => nil)
+    Resque::Plugins::Logstash.transport = double(:push => nil)
   end
 
   it 'complient with resque plugin policy' do
-    expect { Resque::Plugin.lint(Resque::Plugin::Logstash) }.not_to raise_error
+    expect { Resque::Plugin.lint(Resque::Plugins::Logstash) }.not_to raise_error
   end
 
   describe '#around_perform_logstash_measure' do
@@ -44,7 +44,7 @@ describe Resque::Plugin::Logstash do
     end
 
     it 'adds tags' do
-      Resque::Plugin::Logstash.tags = %w{tag1 tag2}
+      Resque::Plugins::Logstash.tags = %w{tag1 tag2}
 
       expect(event.tags).to include(*%w{tag1 tag2})
     end
@@ -56,31 +56,31 @@ describe Resque::Plugin::Logstash do
 
   describe '#logstash_push_duration' do
     it 'calls push on @transport' do
-      Resque::Plugin::Logstash.transport = double
-      expect(Resque::Plugin::Logstash.transport).to receive(:push)
+      Resque::Plugins::Logstash.transport = double
+      expect(Resque::Plugins::Logstash.transport).to receive(:push)
 
       job.logstash_push_duration(0.3, [])
     end
 
     it 'does not push if disabled' do
-      Resque::Plugin::Logstash.configure { |c| c.disabled = true }
+      Resque::Plugins::Logstash.configure { |c| c.disabled = true }
 
-      expect(Resque::Plugin::Logstash.transport).not_to receive(:push)
+      expect(Resque::Plugins::Logstash.transport).not_to receive(:push)
       job.logstash_push_duration(0.3, [])
 
-      Resque::Plugin::Logstash.configure { |c| c.disabled = false }
+      Resque::Plugins::Logstash.configure { |c| c.disabled = false }
     end
   end
 
   describe '#configure' do
     it 'yields' do
       yielded = false
-      Resque::Plugin::Logstash.configure { yielded = true }
+      Resque::Plugins::Logstash.configure { yielded = true }
       expect(yielded).to be_true
     end
 
     it 'yield config object' do
-      Resque::Plugin::Logstash.configure do |c|
+      Resque::Plugins::Logstash.configure do |c|
         %w{transport tags disabled}.each do |method|
           expect(c).to respond_to("#{method}=")
           expect(c).to respond_to("#{method}")

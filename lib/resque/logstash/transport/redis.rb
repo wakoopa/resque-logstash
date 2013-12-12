@@ -1,4 +1,4 @@
-module Resque::Plugin
+module Resque::Plugins
   module Logstash
     module Transport
       class Redis

@@ -7,7 +7,7 @@ require 'resque/logstash/transport/redis'
 require 'resque/logstash/config'
 
 
-module Resque::Plugin
+module Resque::Plugins
   module Logstash
     class << self
       extend Forwardable

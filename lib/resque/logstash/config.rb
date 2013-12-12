@@ -1,4 +1,4 @@
-module Resque::Plugin
+module Resque::Plugins
   module Logstash
     class Config
       attr_accessor :transport, :disabled, :tags
