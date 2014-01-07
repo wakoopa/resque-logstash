@@ -27,21 +27,36 @@ module Resque::Plugins
     def around_perform_logstash_measure(*args)
       started_at = Time.now
       yield
+    rescue Exception => e
+      raise
     ensure
-      logstash_push_duration Time.now - started_at, args
+      logstash_push_duration Time.now - started_at, args, e
     end
 
-    def logstash_push_duration(duration, args)
+    def logstash_push_duration(duration, args, exception)
       return if Logstash.config.disabled?
-      Logstash.config.transport.push logstash_create_event(duration, args)
+      Logstash.config.transport.push logstash_create_event(duration, args, exception)
     end
 
-    def logstash_create_event(duration, args)
-      LogStash::Event.new "message" => "Job #{self.name} finished in #{duration}s",
+    def logstash_create_event(duration, args, exception)
+      if exception.nil?
+        params = {'status' => 'success'}
+        verb = 'finished'
+      else
+        params = {
+          'status' => 'failure',
+          'exception' => "#{exception.class}: #{exception.message}"
+        }
+        verb = 'failed'
+      end
+
+      params = params.merge "message" => "Job #{self.name} #{verb} in #{duration}s",
         "job" => self.name,
         "duration" => duration,
         "job_arguments" => args.map { |a| a.to_s },
         "tags" => Logstash.config.tags
+
+      LogStash::Event.new params
     end
   end
 end
