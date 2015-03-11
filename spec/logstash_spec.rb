@@ -105,7 +105,7 @@ describe Resque::Plugins::Logstash do
     it 'yields' do
       yielded = false
       Resque::Plugins::Logstash.configure { yielded = true }
-      expect(yielded).to be_true
+      expect(yielded).to be true
     end
 
     it 'yield config object' do
