@@ -10,6 +10,20 @@ describe Resque::Plugins::Logstash::Transport::Redis do
       expect(transport.port).to eq(42)
       expect(transport.key).to eq('key')
     end
+
+    it 'accepts host, port and the key as keyword arguments' do
+      transport = Resque::Plugins::Logstash::Transport::Redis.new(host: 'host', port: 42, key: 'key')
+      expect(transport.host).to eq('host')
+      expect(transport.port).to eq(42)
+      expect(transport.key).to eq('key')
+    end
+
+    it 'accepts redis and key as the parameters' do
+      transport = Resque::Plugins::Logstash::Transport::Redis.new(redis: double(rpush: 1), key: 'key')
+      expect(transport.key).to eq('key')
+
+      transport.push(a: 1)
+    end
   end
 
   describe '#push' do

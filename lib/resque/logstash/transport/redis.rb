@@ -2,16 +2,38 @@ module Resque::Plugins
   module Logstash
     module Transport
       class Redis
-        def initialize(host, port, key = 'logstash')
-          @host = host
-          @port = port
-          @key = key
+        Undefined = Object.new
+        def initialize(host, port = nil, key = 'logstash')
+          if host.is_a?(Hash)
+            initialize_with_keyword_arguments(host)
+          else
+            @redis_options = { host: host, port: port }
+            @key = key
+          end
         end
 
-        attr_accessor :host, :port, :key
+        def initialize_with_keyword_arguments(key: 'logstash', redis: nil, **redis_options)
+          @key = key
+
+          if redis
+            @redis = redis
+          else
+            @redis_options = redis_options
+          end
+        end
+
+        attr_reader :key
 
         def redis
-          @redis ||= ::Redis.new(host: host, port: port)
+          @redis ||= ::Redis.new(@redis_options)
+        end
+
+        def host
+          @redis_options[:host]
+        end
+
+        def port
+          @redis_options[:port]
         end
 
         def push(value)
