@@ -2,7 +2,6 @@ module Resque::Plugins
   module Logstash
     module Transport
       class Redis
-        Undefined = Object.new
         def initialize(host, port = nil, key = 'logstash')
           if host.is_a?(Hash)
             initialize_with_keyword_arguments(host)
